@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 const authRoutes = require("./routes/auth");
+const subjectRoutes = require("./routes/subject");
 
 
 
@@ -18,6 +19,7 @@ mongoose
   app.use(express.json());
   app.use(express.urlencoded({ extended: false }));
   app.use('/',authRoutes);
+  app.use('/', subjectRoutes);
 
 app.use((req, res) => {
     res.send("<h1>Welcome to my app</h1>");
