@@ -18,8 +18,8 @@ mongoose
   
   app.use(express.json());
   app.use(express.urlencoded({ extended: false }));
-  app.use('/',authRoutes);
-  app.use('/', subjectRoutes);
+  app.use('/api/v1/',authRoutes);
+  app.use('/api/v1/', subjectRoutes);
 
 app.use((req, res) => {
     res.send("<h1>Welcome to my app</h1>");
