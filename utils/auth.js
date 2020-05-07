@@ -44,6 +44,23 @@ const verifyToken = (req, res, next) => {
 
     
 }
+
+const isAdmin = (req, res, next) => {
+    //get the user's email from req.user
+    const email = req.user;
+
+    User.findOne({ email }, (err, foundUser) => {
+        if (foundUser.roles.indexOf('admin') !== 1) {
+            next()
+        } else {
+            return res.status(401).json({
+                status: 'failed',
+                message: 'Only admin is allowed!'
+            })
+        }
+    })
+}
+
 module.exports = { generateToken, verifyToken };
 
 
