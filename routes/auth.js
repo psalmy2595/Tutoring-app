@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const { signUp } = require("../controllers/auth");
+const { signUp, signIn } = require("../controllers/auth");
 
 router.get("/", (req, res) => {
     res.send("This is the express app. You have now entered express");
@@ -7,6 +7,7 @@ router.get("/", (req, res) => {
 
 router.post('/signup', signUp);
 
+router.post('/signin', signIn);
 module.exports = router;
 
 
