@@ -50,7 +50,7 @@ const isAdmin = (req, res, next) => {
     const email = req.user;
 
     User.findOne({ email }, (err, foundUser) => {
-        if (foundUser.roles.indexOf('admin') !== 1) {
+        if (foundUser.isAdmin === true) {
             next()
         } else {
             return res.status(401).json({
@@ -61,6 +61,15 @@ const isAdmin = (req, res, next) => {
     })
 }
 
-module.exports = { generateToken, verifyToken };
+
+module.exports = { generateToken, verifyToken, isAdmin };
+
+
+
+
+
+
+
+
 
 

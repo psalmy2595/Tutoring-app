@@ -1,6 +1,7 @@
 const bcrypt = require("bcryptjs");
 const User = require("../models/user");
 const { generateToken } = require('../utils/auth.js');
+const { errorResponse, successResponse } = require('../utils/response.js');
 
 exports.signUp = (req, res, next) => {
   const email = req.body.email;
@@ -12,9 +13,17 @@ exports.signUp = (req, res, next) => {
     return res.status(400).send({
       status: false,
       message: "All fields are required",
-      fields: ['email', 'password', 'name']
     });
   }
+
+    if (!role) {
+        return errorResponse(res, 400, 'User role must be specified');
+    }
+    const roles = ['student', 'tutor']
+
+    if (role && roles.indexOf(role) === -1) {
+        return errorResponse(res, 400,'You can only sign up as a student or tutor');
+    }
 
   // if the user already exists
   User.findOne({ email }).then((foundUser) => {
@@ -33,7 +42,7 @@ exports.signUp = (req, res, next) => {
             email: email,
             password: hashedPassword,
             name: name,
-            role: role
+            isTutor: role === 'tutor' ? true : false,
           });
           return user.save();
         }
@@ -98,4 +107,41 @@ exports.signIn = (req, res) => {
       }
     })
   })
+}
+
+exports.getTutors = (req, res) => {
+  User.find({ isTutor: true }, (err, foundTutors) => {
+    if (err) {
+      return errorResponse(res, 422, 'Unable to get tutors')
+    }
+
+    return successResponse(res, 200, foundTutors);
+  })
+}
+
+
+
+exports.makeAdmin = (req, res) => {
+  const email = req.user;
+
+  User.findOne({ email }, (err, foundUser) => {
+    if (err) {
+        return errorResponse(res, 422, err)
+    }
+
+    if (!foundUser) {
+        return errorResponse(res, 404, 'Could not find user');
+    }
+
+    if(foundUser.isTutor ===  false) {
+        return errorResponse(res, 422, 'Only a tutor can become an admin')
+    }
+    if(foundUser.isAdmin ===  true) {
+        return errorResponse(res, 422, 'You are already an admin')
+    }
+
+    foundUser.isAdmin = true
+    foundUser.save();
+    return successResponse(res, 200, foundUser)
+})
 }
