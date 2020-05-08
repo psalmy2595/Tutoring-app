@@ -29,7 +29,7 @@ exports.signUp = (req, res, next) => {
   User.findOne({ email }).then((foundUser) => {
     if (foundUser) {
       return res.json({
-        message: "Sorry the user already exists",
+        message: "Sorry the user already exist",
       });
     }
 
@@ -88,7 +88,7 @@ exports.signIn = (req, res) => {
         return res.status(400).json({
           message: 'Error',
           error: err
-        })
+        }) 
       }
       if (response) {
         // send them a token

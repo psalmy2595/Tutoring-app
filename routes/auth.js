@@ -3,7 +3,7 @@ const { signUp, signIn, makeAdmin, getTutors } = require("../controllers/auth");
 const { verifyToken, isAdmin } = require('../utils/auth');
 
 router.get("/", (req, res) => {
-    res.send("This is the express app. You have now entered express");
+    res.send("This is the online tutoring app. You have now entered express");
 });
 
 router.post('/signup', signUp);
